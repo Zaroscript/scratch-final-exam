@@ -45,6 +45,8 @@
     turn:        { cat: 'motion', html: (d, n) => `turn ${d === 'l' ? '↺' : '↻'} ${inp(n)} degrees` },
     goto:        { cat: 'motion', html: (x, y) => `go to x: ${inp(x)} y: ${inp(y)}` },
     gotorandom:  { cat: 'motion', html: () => `go to ${inp('random position')}` },
+    gotomouse:   { cat: 'motion', html: () => `go to ${inp('mouse-pointer')}` },
+    towards:     { cat: 'motion', html: (t) => `point towards ${inp(t)}` },
     changex:     { cat: 'motion', html: (n) => `change x by ${inp(n)}` },
     changey:     { cat: 'motion', html: (n) => `change y by ${inp(n)}` },
     bounce:      { cat: 'motion', html: () => 'if on edge, bounce' },

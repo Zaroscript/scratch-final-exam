@@ -110,9 +110,6 @@ button:focus-visible, input:focus-visible {
 .q-meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .chip { background: var(--brand-soft); color: #1d4f9e; font-weight: 800; border-radius: 99px; padding: 0 14px; font-size: .95rem; }
 .chip.ok { background: var(--ok-bg); color: var(--ok); }
-.chip.timer { margin-inline-start: auto; background: #fff3c4; color: #6b4b00; font-variant-numeric: tabular-nums; font-size: 1.05rem; }
-.chip.timer.warn { background: #ffd9a0; color: #7a3d00; }
-.chip.timer.danger { background: var(--bad); color: #fff; animation: pulse 1s ease-in-out infinite; }
 
 .progress { height: 12px; background: #e4eaf7; border-radius: 99px; overflow: hidden; margin: 12px 0 12px; }
 .progress i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, #4C97FF, #9966FF); transition: width .4s ease; }

@@ -32,15 +32,15 @@
   };
   /* يرجع رسالة مساعدة تشرح للطالب ما ينقصه دون أن تعطيه الحل كاملاً */
   function diagnose(resp, sol, alts) {
-    if (!resp || !resp.length) return { ok: false, html: 'ابدأ بإضافة الكتل من الأسفل 👇' };
-    if (matches(resp, sol, alts)) return { ok: true, html: '🎉 ممتاز! الكود صحيح.' };
+    if (!resp || !resp.length) return { ok: false, html: 'ابدأ بإضافة الكتل من تحت 👇' };
+    if (matches(resp, sol, alts)) return { ok: true, html: '🎉 برافو! الكود صح.' };
     const have = flat(resp), need = flat(sol);
     const miss = need.filter((x) => { const i = have.indexOf(x); if (i >= 0) { have.splice(i, 1); return false; } return true; });
     const extra = have;
     const show = (j) => blockHTML(JSON.parse(j).concat(DEFS[JSON.parse(j)[0]].c ? [[]] : []));
-    if (miss.length) return { ok: false, html: `ينقصك كتلة مثل: ${show(miss[0])}` };
-    if (extra.length) return { ok: false, html: `عندك كتلة زيادة لا نحتاجها: ${show(extra[0])}` };
-    return { ok: false, html: 'الكتل صحيحة 👍 لكن الترتيب أو مكانها داخل الكتل الأخرى غير صحيح. جرّب مرة أخرى.' };
+    if (miss.length) return { ok: false, html: `ناقصك كتلة زي: ${show(miss[0])}` };
+    if (extra.length) return { ok: false, html: `عندك كتلة زيادة مش محتاجينها: ${show(extra[0])}` };
+    return { ok: false, html: 'الكتل صح 👍 بس الترتيب أو مكانها جوّه الكتل التانية مش مظبوط. جرّب تاني.' };
   }
 
   /* ---------- الأداة نفسها ---------- */
@@ -68,8 +68,8 @@
     function slotHTML(c, i, list) {
       const on = active.c.join('.') === c.join('.') && active.i === i;
       const empty = list.length === 0;
-      const label = empty ? (c.length ? 'ضع الكتل هنا' : 'اضغط على كتلة من الأسفل أو اسحبها هنا') : '';
-      return `<button class="slot${on ? ' on' : ''}${empty ? ' empty' : ''}" type="button" data-c="${c.join('.')}" data-i="${i}" aria-label="مكان الإدراج رقم ${i + 1}${on ? ' (المحدد)' : ''}">${label}</button>`;
+      const label = empty ? (c.length ? 'حط الكتل هنا' : 'اضغط على كتلة من تحت أو اسحبها هنا') : '';
+      return `<button class="slot${on ? ' on' : ''}${empty ? ' empty' : ''}" type="button" data-c="${c.join('.')}" data-i="${i}" aria-label="مكان الإضافة رقم ${i + 1}${on ? ' (المحدد)' : ''}">${label}</button>`;
     }
     function listHTML(list, c) {
       let out = '';
@@ -81,7 +81,7 @@
     function nodeHTML(n, c, i) {
       const d = DEFS[n.k];
       const color = window.SB.CATS[d.cat];
-      const del = `<button class="bdel" type="button" data-del="1" data-c="${c.join('.')}" data-i="${i}" aria-label="احذف الكتلة">✕</button>`;
+      const del = `<button class="bdel" type="button" data-del="1" data-c="${c.join('.')}" data-i="${i}" aria-label="امسح الكتلة">✕</button>`;
       const at = `data-nc="${c.join('.')}" data-ni="${i}"`;
       if (d.c) {
         const inner = listHTML(n.kids, [...c, i]);
@@ -94,7 +94,7 @@
     function render() {
       box.innerHTML = `<div class="bld">
         <div class="bld-code">
-          <div class="bld-title"><span>🧱 الكود الذي تبنيه</span><button class="btn ghost small" type="button" data-clear="1">🗑 امسح الكل</button></div>
+          <div class="bld-title"><span>🧱 الكود اللي بتبنيه</span><button class="btn ghost small" type="button" data-clear="1">🗑 امسح الكل</button></div>
           <div class="script bscript">${listHTML(tree, [])}</div>
           <div class="bld-msg" role="status" hidden></div>
         </div>
@@ -111,9 +111,9 @@
       const spec = palette[p];
       const hat = isHat(spec[0]);
       const list = listAt(c);
-      if (hat && !(c.length === 0 && i === 0)) { flash('كتلة البداية (الأصفر) تكون في أول الكود فقط'); return false; }
-      if (hat && list[0] && isHat(list[0].k)) { flash('عندك كتلة بداية بالفعل. احذفها لو أردت تغييرها'); return false; }
-      if (!hat && c.length === 0 && i === 0 && list[0] && isHat(list[0].k)) { flash('لا نضع كتلة فوق كتلة البداية'); return false; }
+      if (hat && !(c.length === 0 && i === 0)) { flash('كتلة البداية (الصفرا) بتكون في أول الكود بس'); return false; }
+      if (hat && list[0] && isHat(list[0].k)) { flash('عندك كتلة بداية بالفعل. امسحها لو عايز تغيّرها'); return false; }
+      if (!hat && c.length === 0 && i === 0 && list[0] && isHat(list[0].k)) { flash('ماينفعش نحط كتلة فوق كتلة البداية'); return false; }
       list.splice(i, 0, fromSpec(spec));
       active = DEFS[spec[0]].c ? { c: [...c, i], i: 0 } : { c, i: i + 1 };
       emit(); render();
@@ -181,7 +181,7 @@
         clearOver();
         suppressClick = true;
         setTimeout(() => { suppressClick = false; }, 0);
-        if (t) insert(t.c, t.i, p); else flash('أفلت الكتلة داخل منطقة الكود');
+        if (t) insert(t.c, t.i, p); else flash('سيب الكتلة جوّه منطقة الكود');
       };
       window.addEventListener('pointermove', move);
       window.addEventListener('pointerup', end);
